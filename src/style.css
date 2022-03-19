@@ -1,0 +1,95 @@
+@font-face {
+    font-family: "SiteFont";
+    src:url("./font.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+
+html, body, #holder, #root {
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    -webkit-app-region: drag;
+}
+
+body {
+	margin: 0;
+	overflow: hidden;
+	user-select: none;
+}
+
+p {
+    margin: 0 0 0 0;
+    font-family: "SiteFont";
+    text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.56),
+                 -1px -1px 0px rgba(255, 255, 255, 0.56),
+                 -1px 1px 0px rgba(255, 255, 255, 0.56),
+                 1px -1px 0px rgba(255, 255, 255, 0.56);
+}
+
+#root { /* 최상위 */
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    flex-direction: column;
+}
+#holder { /* 아이템 나열 */
+    display: flex;
+    align-content: center;
+    justify-content: space-around;
+    flex-direction: row;
+}
+
+.display { /* 아이템 */
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.display .titleHolder { /* 급식 제목 홀더 */
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-content: center;
+    flex-direction: row;
+}
+.display .icon { /* 급식 제목 아이콘 */
+    width: 31px;
+    height: 31px;
+    margin-right: 8px;
+}
+.display .title { /* 급식 제목 */
+    font-size: 1.64em;
+    margin-bottom: 8px;
+}
+.display .nutrition { /* 영양 정보 */
+    width: 100%;
+    height: auto;
+    font-size: 0.94em;
+    opacity: 0.8;
+}
+.display .menu { /* 급식 매뉴 */
+    margin-bottom: 4px;
+    width: 100%;
+    height: auto;
+    font-size: 1.3em;
+}
+
+/* 애플리캐이션 타이틀바 */
+#topbar {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    flex-direction: row;
+    margin-bottom: 9px;
+}
+#topbar .title {
+    font-size: 1.9em;
+    margin-bottom: 0px;
+    text-align: justify;
+    text-align-last: center;
+    padding-top: 8px;
+}
+#topbar .icon {
+    width: 52px;
+    height: 52px;
+    margin-right: 12px;
+}

@@ -1,0 +1,19 @@
+{
+  "name": "school_meals",
+  "version": "1.0.0",
+  "description": "나이스 API 에서 학교 점심/저녁 메뉴를 가져옵니다, 위젯 형식으로 사용할 수 있으며. 학교 컴퓨터에 배치하는걸 목적으로 합니다",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "electron": "12",
+    "electron-builder": "^22.7.0",
+    "electronmon": "^1.1.2"
+  },
+  "keywords": [
+    "meal"
+  ],
+  "author": "qwreey75@gmail.com",
+  "license": "MIT"
+}
