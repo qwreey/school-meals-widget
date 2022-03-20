@@ -1,4 +1,6 @@
 
+![미리보기](docs/header.png)  
+
 # 학교 급식 정보 위젯
 
 **node js 설치 필수**  
