@@ -4,27 +4,24 @@
     font-style: normal;
     font-weight: normal;
 }
-
-html, body, #root {
+html, body, #root, #backgroundImage {
     width: 100%;
     height: 100%;
     background-color: transparent;
     -webkit-app-region: drag;
 }
-
 body {
 	margin: 0;
 	overflow: hidden;
 	user-select: none;
 }
-
 p {
     margin: 0 0 0 0;
     font-family: "SiteFont";
-    text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.42),
+    text-shadow: 1px  1px  0px rgba(255, 255, 255, 0.42),
                  -1px -1px 0px rgba(255, 255, 255, 0.42),
-                 -1px 1px 0px rgba(255, 255, 255, 0.42),
-                 1px -1px 0px rgba(255, 255, 255, 0.42);
+                 -1px 1px  0px rgba(255, 255, 255, 0.42),
+                 1px  -1px 0px rgba(255, 255, 255, 0.42);
 }
 
 #root { /* 최상위 */
@@ -41,11 +38,13 @@ p {
 }
 #backgroundImage { /* 배경 */
     position: absolute;
-    width: 100%;
-    height: 100%;
     z-index: -1;
 }
+.hidden {
+    display: none !important;
+}
 
+/* 급식 정보판 */
 .display { /* 아이템 */
     margin-left: 4px;
     margin-right: 4px;
@@ -65,12 +64,6 @@ p {
 .display .title { /* 급식 제목 */
     font-size: 1.64em;
     margin-bottom: 8px;
-}
-.display .nutrition { /* 영양 정보 */
-    width: 100%;
-    height: auto;
-    font-size: 0.94em;
-    opacity: 0.8;
 }
 .display .menu { /* 급식 매뉴 */
     margin-bottom: 4px;
@@ -98,4 +91,13 @@ p {
     width: 52px;
     height: 52px;
     margin-right: 12px;
+}
+
+/* 오류 정보 */
+#error {
+    width: 100%;
+    height: auto;
+}
+#error p {
+    font-size: 1.5em;
 }

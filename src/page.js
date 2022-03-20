@@ -17,6 +17,15 @@ async function getMeal(date,mealId) {
 
 function showErr(msg) {
     console.error(msg)
+    let error = document.getElementById("error")
+    let holder = document.getElementById("holder")
+
+    error.innerHTML = `
+        <p>${msg}</p>
+    `
+
+    error.classList.remove("hidden")
+    holder.classList.add("hidden")
 }
 
 async function display(id,date,mealCode) {
@@ -31,13 +40,10 @@ async function display(id,date,mealCode) {
         return [false,"오늘의 급식 정보를 확인할 수 없습니다"]
     }
 
-    let body = document.getElementById(id)
+    let display = document.getElementById(id)
 
     let menu = data.DDISH_NM
-    // let nutrition = data.NTR_INFO
-
-    body.getElementsByClassName("menu")[0].innerHTML = menu.replace(ignoreRegex,"")
-    // body.getElementsByClassName("nutrition")[0].innerHTML = nutrition.replace(ignoreRegex,"")
+    display.getElementsByClassName("menu")[0].innerHTML = menu.replace(ignoreRegex,"")
 
     return ["ok"]
 }
@@ -50,13 +56,13 @@ async function main() {
     day = (day.length == 1 ? "0" : "") + day
     let date = now.getFullYear().toString() + month + day
 
-    let [successLunch,errLunch] = await display("display_lunch",20220318,2)
+    let [successLunch,errLunch] = await display("display_lunch",date,2)
     if (!successLunch) {
         showErr(errLunch)
         return
     }
 
-    let [successDinner,errDinner] = await display("display_dinner",20220318,3)
+    let [successDinner,errDinner] = await display("display_dinner",date,3)
     if (!successDinner) {
         showErr(errDinner)
         return
