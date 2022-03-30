@@ -9,6 +9,7 @@ const winSize = config.winSize
 
 function createWindow() {
 	win = new BrowserWindow({
+		minimizable: true,
 		// icon: 'src/app.png',
 		width: parseInt(winSize[0] * renderScale),
 		height: parseInt(winSize[1] * renderScale),
@@ -25,7 +26,7 @@ function createWindow() {
 		},
 	})
 
-    win.setSkipTaskbar(true);
+	win.setSkipTaskbar(true);
 	win.loadFile("src/index.html")
 
 	win.on("closed", () => {
@@ -36,9 +37,7 @@ function createWindow() {
 app.on("ready", createWindow)
 
 app.on("window-all-closed", () => {
-	if (process.platform !== "darwin") {
-		app.quit()
-	}
+	app.quit()
 })
 
 app.on("activate", () => {
