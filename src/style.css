@@ -18,10 +18,10 @@ body {
 p {
     margin: 0 0 0 0;
     font-family: "SiteFont";
-    text-shadow: 1px  1px  0px rgba(255, 255, 255, 0.42),
-                 -1px -1px 0px rgba(255, 255, 255, 0.42),
-                 -1px 1px  0px rgba(255, 255, 255, 0.42),
-                 1px  -1px 0px rgba(255, 255, 255, 0.42);
+    text-shadow: 1px  1px  0px white,
+                 -1px -1px 0px white,
+                 -1px 1px  0px white,
+                 1px  -1px 0px white;
 }
 
 #root { /* 최상위 */
