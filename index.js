@@ -4,15 +4,14 @@ app.allowRendererProcessReuse = false
 
 let win
 const config = require("./config.json")
-const renderScale = config.renderScale
 const winSize = config.winSize
 
 function createWindow() {
 	win = new BrowserWindow({
-		minimizable: true,
+		minimizable: false,
 		// icon: 'src/app.png',
-		width: parseInt(winSize[0] * renderScale),
-		height: parseInt(winSize[1] * renderScale),
+		width: parseInt(winSize[0]),
+		height: parseInt(winSize[1]),
 		frame: false,
 		resizable: true,
 		// alwaysOnTop: true,
