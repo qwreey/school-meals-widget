@@ -26,7 +26,7 @@ function createWindow() {
 		},
 	})
 
-	win.setSkipTaskbar(true);
+	win.setSkipTaskbar(true)
 	win.loadFile("src/index.html")
 
 	win.on("closed", () => {
