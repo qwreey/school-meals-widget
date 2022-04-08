@@ -9,7 +9,7 @@ const winSize = config.winSize
 function createWindow() {
 	win = new BrowserWindow({
 		minimizable: false,
-		// icon: 'src/app.png',
+		icon: 'src/icons/headerIcon.png',
 		width: parseInt(winSize[0]),
 		height: parseInt(winSize[1]),
 		frame: false,
@@ -30,6 +30,13 @@ function createWindow() {
 
 	win.on("closed", () => {
 		win = null
+	})
+
+	win.on("minimize", () => {
+		win.setSkipTaskbar(false)
+	})
+	win.on("restore", () => {
+		win.setSkipTaskbar(true)
 	})
 }
 
