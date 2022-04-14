@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require("electron")
+const { app, BrowserWindow, globalShortcut } = require("electron")
 const path = require("path")
 app.allowRendererProcessReuse = false
 
@@ -38,6 +38,19 @@ function createWindow() {
 	win.on("restore", () => {
 		win.setSkipTaskbar(true)
 	})
+	app.on("ready", () => {
+		app.on("browser-window-focus", () => {
+			globalShortcut.register("CommandOrControl+R",()=>{
+				return;
+			});
+			globalShortcut.register("CommandOrControl+W",()=>{
+				return;
+			});
+		});
+		app.on("browser-window-blur", () => {
+			globalShortcut.unregisterAll();
+		});
+	});
 }
 
 app.on("ready", createWindow)
