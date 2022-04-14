@@ -13,7 +13,7 @@ function createWindow() {
 		width: parseInt(winSize[0]),
 		height: parseInt(winSize[1]),
 		frame: false,
-		resizable: true,
+		resizable: false,
 		// alwaysOnTop: true,
 		transparent: true,
 		webPreferences: {
