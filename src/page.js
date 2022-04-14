@@ -48,6 +48,14 @@ async function display(id,date,mealCode) {
     return ["ok"]
 }
 
+// alt+F4 로 꺼지는거 막음
+window.addEventListener('keydown', (e) => {
+    const { key, altKey } = e;
+    if (key === 'F4' && altKey) {
+        e.preventDefault();   
+    }
+});
+
 async function main() {
     let now = new Date()
     let month = (now.getMonth() + 1).toString()
