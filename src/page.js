@@ -1,4 +1,3 @@
-
 const API_KEY = config.API_KEY
 const REG_CODE = config.REG_CODE
 const SC_CODE = config.SC_CODE
