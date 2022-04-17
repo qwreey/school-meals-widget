@@ -1,5 +1,6 @@
 const { app, BrowserWindow } = require("electron")
 const path = require("path")
+const fs = require("fs")
 app.allowRendererProcessReuse = false
 
 let win
@@ -37,6 +38,19 @@ function createWindow() {
 	})
 	win.on("restore", () => {
 		win.setSkipTaskbar(true)
+	})
+	try {
+		let initPath = path.join(app.getPath("appData"), "school_meals.json")
+		let data = JSON.parse(fs.readFileSync(initPath, 'utf8'))
+		win.setPosition(data.x,data.y)
+	} catch {}
+
+	win.on('close', ()=>{
+		try {
+			let [x,y] = win.getPosition()
+			let initPath = path.join(app.getPath("appData"), "school_meals.json")
+			fs.writeFileSync(initPath,JSON.stringify({x:x,y:y}))
+		} catch {}
 	})
 }
 
