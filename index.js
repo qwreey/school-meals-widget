@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require("electron")
+const { app, BrowserWindow, globalShortcut } = require("electron")
 const path = require("path")
 const fs = require("fs")
 app.allowRendererProcessReuse = false
@@ -14,7 +14,7 @@ function createWindow() {
 		width: parseInt(winSize[0]),
 		height: parseInt(winSize[1]),
 		frame: false,
-		resizable: true,
+		resizable: false,
 		// alwaysOnTop: true,
 		transparent: true,
 		webPreferences: {
@@ -39,6 +39,7 @@ function createWindow() {
 	win.on("restore", () => {
 		win.setSkipTaskbar(true)
 	})
+
 	try {
 		let initPath = path.join(app.getPath("appData"), "school_meals.json")
 		let data = JSON.parse(fs.readFileSync(initPath, 'utf8'))
@@ -52,6 +53,20 @@ function createWindow() {
 			fs.writeFileSync(initPath,JSON.stringify({x:x,y:y}))
 		} catch {}
 	})
+
+	win.on("ready", () => {
+		win.on("browser-window-focus", () => {
+			globalShortcut.register("CommandOrControl+R",()=>{
+				return;
+			});
+			globalShortcut.register("CommandOrControl+W",()=>{
+				return;
+			});
+		});
+		win.on("browser-window-blur", () => {
+			globalShortcut.unregisterAll();
+		});
+	});
 }
 
 app.on("ready", createWindow)

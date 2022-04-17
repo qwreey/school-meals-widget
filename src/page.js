@@ -1,4 +1,3 @@
-
 const API_KEY = config.API_KEY
 const REG_CODE = config.REG_CODE
 const SC_CODE = config.SC_CODE
@@ -47,6 +46,14 @@ async function display(id,date,mealCode) {
 
     return ["ok"]
 }
+
+// alt+F4 로 꺼지는거 막음
+window.addEventListener('keydown', (e) => {
+    const { key, altKey } = e;
+    if (key === 'F4' && altKey) {
+        e.preventDefault();   
+    }
+});
 
 async function main() {
     let now = new Date()
