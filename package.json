@@ -1,6 +1,6 @@
 {
   "name": "school_meals",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "나이스 API 에서 학교 점심/저녁 메뉴를 가져옵니다, 위젯 형식으로 사용할 수 있으며. 학교 컴퓨터에 배치하는걸 목적으로 합니다",
   "main": "index.js",
   "scripts": {

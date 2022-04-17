@@ -54,19 +54,7 @@ function createWindow() {
 		} catch {}
 	})
 
-	win.on("ready", () => {
-		win.on("browser-window-focus", () => {
-			globalShortcut.register("CommandOrControl+R",()=>{
-				return;
-			});
-			globalShortcut.register("CommandOrControl+W",()=>{
-				return;
-			});
-		});
-		win.on("browser-window-blur", () => {
-			globalShortcut.unregisterAll();
-		});
-	});
+	win.removeMenu() // prevent ctrl w and ctrl r
 }
 
 app.on("ready", createWindow)
