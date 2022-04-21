@@ -45,14 +45,16 @@ function createWindow() {
 		let data = JSON.parse(fs.readFileSync(initPath, 'utf8'))
 		win.setPosition(data.x,data.y)
 	} catch {}
-
-	win.on('close', ()=>{
+	
+	function update() {
 		try {
 			let [x,y] = win.getPosition()
 			let initPath = path.join(app.getPath("appData"), "school_meals.json")
 			fs.writeFileSync(initPath,JSON.stringify({x:x,y:y}))
 		} catch {}
-	})
+	}
+	win.on('close', update)
+	win.on("moved", update)
 
 	win.removeMenu() // prevent ctrl w and ctrl r
 }
