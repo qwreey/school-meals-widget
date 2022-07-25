@@ -56,7 +56,7 @@ function createWindow() {
 	win.on('close', update)
 	win.on("moved", update)
 
-	// win.removeMenu() // prevent ctrl w and ctrl r
+	win.removeMenu() // prevent ctrl w and ctrl r
 }
 
 app.on("ready", createWindow)
