@@ -1,7 +1,9 @@
-const API_KEY = config.API_KEY
+const API_KEY = config.API_KEY || "a2929ada2e4143a5a7dfdde5a98cc616"
 const REG_CODE = config.REG_CODE
 const SC_CODE = config.SC_CODE
 const ignoreRegex = new RegExp(config.ignoreRegex,'g')
+
+const config = await electron.ipcRenderer.invoke("getConfig")
 
 async function fetchAsync (url) {
     let response = await fetch(url)
