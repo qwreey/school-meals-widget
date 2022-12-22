@@ -1,8 +1,8 @@
-const { app, BrowserWindow, ipcMain } = require("electron")
+const { app, BrowserWindow, ipcMain, globalShortcut, ipcRenderer } = require("electron")
 const path = require("path")
 const fs = require("fs")
-const mostBottomWindow = require("./mostBottomWindow")
-// console.log(mostBottomWindow)
+const mostBottomWindow = process.platform === "win32" && require("./mostBottomWindowWIN32")
+const ENV = process.env.ENV || "dist"
 
 // 설정 읽어드리기
 const configPath = path.join(app.getPath("appData"),"schoolMeals.config.json")
@@ -10,20 +10,23 @@ function saveConfig(newConfig) {
 	fs.writeFileSync(configPath,JSON.stringify(newConfig))
 }
 try {config = JSON.parse(fs.readFileSync(configPath)) } catch {
-	config = { showSetupScreen: true, winSize: [332,332], ignoreRegex: "\\(? ?[0-9]+\\. ?\\)?", "SC_CODE": null, "REG_CODE": null }
+	config = { winSize: [332,348], ignoreRegex: "\\(? ?[0-9]+\\.? ?\\)?", "SC_CODE": null, "REG_CODE": null, "SC_NAME": null }
 	saveConfig(config)
 }
-const winSize = config.winSize || [332,332]
+const winSize = config.winSize || [332,348]
 
 // 설정 넘겨주는 ipc handler
 ipcMain.handle('getConfig',() => {
 	return config
 })
-ipcMain.handle('setConfig',(newConfig) => {
-	newConfig.forEach((value,index) => {
+ipcMain.handle('setConfig',(_,newConfig) => {
+	for (const [index, value] of Object.entries(newConfig)) {
 		config[index] = value
-	})
+	}
 	saveConfig(config)
+})
+ipcMain.handle('getENV',() => {
+	return ENV
 })
 
 // 윈도우 생성
@@ -40,11 +43,12 @@ function createWindow() {
 		transparent: true,
 		webPreferences: {
 			transparent: true,
-			preload: path.join(__dirname, "preload.js"),
+			// preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
 			enableRemoteModule: true,
 			contextIsolation: false,
 		},
+		type: "desktop",
 	})
 
 	win.setSkipTaskbar(true) // 작업 표시줄에서 표시 안함
@@ -76,13 +80,19 @@ function createWindow() {
 	win.on('close', winPosUpdated)
 	win.on("moved", winPosUpdated)
 
-	win.removeMenu() // ctrl w 로 꺼짐 방지
+	if (ENV != "dev") win.removeMenu() // ctrl w 로 꺼짐 방지
 
 	// TODO
 	// 뒤로 숨기기 (창 맨 아래로)
 	if (process.platform === "win32") {
-		mostBottomWindow.SendElectronWindowToBackAndKeepItThere(win)
+		mostBottomWindow.apply(win,ENV=="dev")
 	}
+
+	// 시작 프로그램 등록
+	app.setLoginItemSettings({
+		openAtLogin: true,
+		path: app.getPath("exe")
+	})
 }
 
 // App 핸들링

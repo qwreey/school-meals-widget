@@ -17,6 +17,7 @@
   "author": "qwreey75@gmail.com",
   "license": "MIT",
   "build": {
+    "npmRebuild": false,
     "productName": "School-Meals",
     "appId": "com.github.qwreey75.school_meals",
     "win": {
@@ -34,7 +35,6 @@
     }
   },
   "dependencies": {
-    "ref-napi": "^3.0.3",
-    "ref-struct-di": "^1.1.1"
+    "win-setwindowpos": "^2.1.0"
   }
 }
