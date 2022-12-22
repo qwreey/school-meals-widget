@@ -1,2 +1,1 @@
-npx electron-builder build --win 
-nsis
+npx electron-builder build --win nsis
