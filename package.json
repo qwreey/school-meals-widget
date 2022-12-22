@@ -7,9 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "electron": "^19.0.1",
-    "electron-builder": "^22.7.0",
-    "electronmon": "^1.1.2"
+    "electron": "^22.0.0",
+    "electron-builder": "^23.6.0",
+    "electronmon": "^2.0.2"
   },
   "dependencies": {
     "lodash": "^4.17.20"
