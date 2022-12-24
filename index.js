@@ -10,10 +10,10 @@ function saveConfig(newConfig) {
 	fs.writeFileSync(configPath,JSON.stringify(newConfig))
 }
 try {config = JSON.parse(fs.readFileSync(configPath)) } catch {
-	config = { winSize: [332,348], ignoreRegex: "\\(? ?[0-9]+\\.? ?\\)?", "SC_CODE": null, "REG_CODE": null, "SC_NAME": null }
+	config = { winSize: [332,358], ignoreRegex: "(\\(? ?[0-9]+\\. ?\\)?)|[#*]", "SC_CODE": null, "REG_CODE": null, "SC_NAME": null }
 	saveConfig(config)
 }
-const winSize = config.winSize || [332,348]
+const winSize = config.winSize || [332,358]
 
 // 설정 넘겨주는 ipc handler
 ipcMain.handle('getConfig',() => {
@@ -28,6 +28,15 @@ ipcMain.handle('setConfig',(_,newConfig) => {
 ipcMain.handle('getENV',() => {
 	return ENV
 })
+ipcMain.handle('setmostBottomWindowEnabled',(_,value)=>{
+	if (value)
+		mostBottomWindow.enable(win,ENV=="dev")
+	else
+		mostBottomWindow.disable(win)
+})
+ipcMain.handle('takeFocus',()=>{
+	win.focus()
+})
 
 // 윈도우 생성
 let win
@@ -39,11 +48,9 @@ function createWindow() {
 		height: parseInt(winSize[1]),
 		frame: false,
 		resizable: false,
-		// alwaysOnTop: true,
 		transparent: true,
 		webPreferences: {
 			transparent: true,
-			// preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
 			enableRemoteModule: true,
 			contextIsolation: false,
@@ -85,14 +92,16 @@ function createWindow() {
 	// TODO
 	// 뒤로 숨기기 (창 맨 아래로)
 	if (process.platform === "win32") {
-		mostBottomWindow.apply(win,ENV=="dev")
+		mostBottomWindow.enable(win,ENV=="dev")
 	}
 
 	// 시작 프로그램 등록
-	app.setLoginItemSettings({
-		openAtLogin: true,
-		path: app.getPath("exe")
-	})
+	if (ENV != "dev") {
+		app.setLoginItemSettings({
+			openAtLogin: true,
+			path: app.getPath("exe")
+		})
+	}
 }
 
 // App 핸들링

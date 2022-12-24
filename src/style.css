@@ -121,10 +121,11 @@ p {
     display: flex;
     flex-direction: row;
     justify-content: right;
+    padding-top: 12px;
 }
 .bottombarButton {
     -webkit-app-region: no-drag;
-    margin-top: 12px;
+    /* margin-top: 12px; */
     display: flex;
     flex-direction: row;
     justify-content: right;
