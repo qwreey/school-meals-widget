@@ -1,6 +1,8 @@
 
 ![미리보기](docs/header.png)  
 
+[홈페이지](https://blog.qwreey.kr/mealswidget)
+
 # 프로그램 받기
 
 ## 릴리즈 탭에서 받기
