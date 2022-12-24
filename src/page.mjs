@@ -1,6 +1,7 @@
 const electron = require("electron")
 // 설정 가져오기
 const config = await electron.ipcRenderer.invoke("getConfig")
+const packageInfo = await electron.ipcRenderer.invoke("getPackageInfo")
 
 const API_KEY = config.API_KEY || "a2929ada2e4143a5a7dfdde5a98cc616"
 const REG_CODE = config.REG_CODE
@@ -40,100 +41,6 @@ closeButton.classList.add("hidden")
 let reloadButton = document.getElementById("reload_button")
 reloadButton.onclick = ()=>location.reload()
 reloadButton.classList.add("hidden")
-
-// 설정 열기닫기
-let root = document.getElementById("root")
-let configPanel = document.getElementById("config_panel")
-let configButton = document.getElementById("config_button")
-function openConfigPanel() {
-	root.style.filter = "blur(22px)"
-	configPanel.classList.remove("hidden")
-	window.resizeTo(configPanel.offsetWidth,configPanel.offsetHeight)
-
-	let config_scale = document.getElementById("config_scale")
-	config_scale.value = scale
-
-	// 학교 이름
-	let config_school_text = document.getElementById("config_school_text")
-	config_school_text.innerText = SC_NAME || "없음"
-
-	// 저녁 비활성화 유무
-	let config_disable_dinner = document.getElementById("config_disable_dinner")
-	config_disable_dinner.checked  = disableDinner
-
-	// 무시 regex
-	let config_ignore_regex = document.getElementById("config_ignore_regex")
-	config_ignore_regex.value = config.ignoreRegex
-
-	// 학교 검색창
-	let config_school_search = document.getElementById("config_school_search")
-	let config_school_search_input = document.getElementById("config_school_search_input")
-	let school_search_item_template = document.getElementById("school_search_item_template")
-	let searchTimeout
-	let new_REG_CODE,new_SC_CODE,new_SC_NAME
-	config_school_search_input.onkeyup=async()=>{
-		if(window.event.keyCode==13){
-			if (searchTimeout) return
-			searchTimeout = true
-			let text = config_school_search_input.value
-			if (text == "") return
-			let schoolInfos = await getSchool(text)
-			searchTimeout = setTimeout(()=>{
-				searchTimeout = null
-			},1000)
-			// 이미 있던 검색 결과 지우기
-			config_school_search.childNodes.forEach((child)=>{
-				if (child.id != "config_school_search_input") config_school_search.removeChild(child)
-			})
-			console.log(schoolInfos)
-
-			if (schoolInfos.RESULT) {
-				let node = school_search_item_template.content.firstElementChild.cloneNode(true)
-				node.querySelector(".school_search_item_text").textContent = "검색 결과가 없습니다"
-				config_school_search.appendChild(node)
-				return
-			}
-			schoolInfos.schoolInfo[1].row.forEach((school)=>{
-				let node = school_search_item_template.content.firstElementChild.cloneNode(true)
-				node.onclick = ()=>{
-					new_REG_CODE = school.ATPT_OFCDC_SC_CODE
-					new_SC_CODE = school.SD_SCHUL_CODE
-					new_SC_NAME = school.SCHUL_NM
-					config_school_text.innerText = new_SC_NAME
-				}
-				node.querySelector(".school_search_item_text").textContent = `${school.SCHUL_NM} (${school.ORG_RDNMA})`
-				config_school_search.appendChild(node)
-			})
-
-		}
-	}
-
-	// 버그 리포트 버튼
-	let config_report_button = document.getElementById("config_report_button")
-	config_report_button.onclick = ()=>electron.shell.openExternal('https://github.com/qwreey75/schoolMealsWidget/issues/new')
-
-	// 취소버튼
-	let config_cancel_button = document.getElementById("config_cancel_button")
-	config_cancel_button.onclick = ()=>{
-		window.resizeTo(Math.ceil(winSize[0]*cropedScale),Math.ceil(winSize[1]*cropedScale))
-		location.reload()
-	}
-
-	// 저장버튼
-	let config_save_button = document.getElementById("config_save_button")
-	config_save_button.onclick = async()=>{
-		config.scale = config_scale.value != "" ? Number(config_scale.value) : 1
-		config.disableDinner = config_disable_dinner.checked;
-		config.ignoreRegex = config_ignore_regex.value
-		config.SC_NAME = new_SC_NAME || config.SC_NAME
-		config.SC_CODE = new_SC_CODE || config.SC_CODE
-		config.REG_CODE = new_REG_CODE || config.REG_CODE
-		await electron.ipcRenderer.invoke("setConfig",config)
-		window.resizeTo(Math.ceil(winSize[0]*cropedScale),Math.ceil(winSize[1]*cropedScale))
-		location.reload()
-	}
-}
-configButton.onclick = openConfigPanel
 
 // 오류 보여주기
 function showErr(msg) {
@@ -209,36 +116,151 @@ async function update() {
 }
 update()
 
-// 크기조절 요청하기
-// let lastRootSizeX = root.offsetWidth,lastRootSizeY = root.offsetHeight,updateWindowSizeTimeout,windowSizeUpdated
-// function updateWindowSize() {
-// 	if (configPanelVisible) return
-// 	window.resizeTo(Math.ceil(lastRootSizeX),Math.ceil(lastRootSizeY))
-// }
-// function removeUpdateWindowTimeout() {
-// 	updateWindowSizeTimeout = null
-// 	if (windowSizeUpdated) {
-// 		windowSizeUpdated = null
-// 		updateWindowSize()
-// 	}
-// }
-// function onRootSizeChanged() {
-// 	lastRootSizeY = root.offsetHeight
-// 	lastRootSizeX = root.offsetWidth
-// 	if (updateWindowSizeTimeout) {
-// 		windowSizeUpdated = true
-// 		return
-// 	}
-// 	updateWindowSizeTimeout = setTimeout(removeUpdateWindowTimeout,100)
-// }
-// new ResizeObserver(onRootSizeChanged).observe(root)
-
-// 스캐일 지정
-let cropedScale = Math.min(scale,3)
-root.style.fontSize = `${cropedScale}em`
-window.resizeTo(Math.ceil(winSize[0]*cropedScale),Math.ceil(winSize[1]*cropedScale))
-
 // 저녁 끄기
 if (disableDinner) {
 	document.getElementById("display_dinner").classList.add("hidden")
 }
+
+// 이미지 복사 막기
+{
+	Array.from(document.getElementsByTagName("img")).forEach(item=>{
+		item.draggable = false
+	})
+}
+
+// 스캐일 지정
+let cropedScale = Math.min(scale,4)
+let root = document.getElementById("root")
+root.style.fontSize = `${cropedScale}em`
+window.resizeTo(Math.ceil(winSize[0]*cropedScale),Math.ceil(winSize[1]*cropedScale))
+
+// 크기조절 요청하기
+let lastRootSizeY = root.offsetHeight,updateWindowSizeTimeout,windowSizeUpdated
+function updateWindowSize() {
+	if (configPanelVisible) return
+	window.resizeTo(Math.ceil(winSize[0]*cropedScale),Math.ceil(lastRootSizeY))
+}
+function removeUpdateWindowTimeout() {
+	updateWindowSizeTimeout = null
+	if (windowSizeUpdated) {
+		windowSizeUpdated = null
+		updateWindowSize()
+	}
+}
+function onRootSizeChanged() {
+	lastRootSizeY = root.offsetHeight
+	if (updateWindowSizeTimeout) {
+		windowSizeUpdated = true
+		return
+	}
+	updateWindowSizeTimeout = setTimeout(removeUpdateWindowTimeout,100)
+}
+new ResizeObserver(onRootSizeChanged).observe(root)
+onRootSizeChanged()
+
+// 설정 열기닫기
+let configPanel = document.getElementById("config_panel")
+let configButton = document.getElementById("config_button")
+let configPanelVisible
+async function openConfigPanel() {
+	configPanelVisible = true
+	await electron.ipcRenderer.invoke("setmostBottomWindowEnabled",false)
+	await electron.ipcRenderer.invoke("takeFocus")
+	root.classList.add("hidden")
+	configPanel.classList.remove("hidden")
+	window.resizeTo(configPanel.offsetWidth,configPanel.offsetHeight)
+
+	let config_scale = document.getElementById("config_scale")
+	config_scale.value = scale
+
+	// 학교 이름
+	let config_school_text = document.getElementById("config_school_text")
+	config_school_text.innerText = SC_NAME || "없음"
+
+	// 저녁 비활성화 유무
+	let config_disable_dinner = document.getElementById("config_disable_dinner")
+	config_disable_dinner.checked  = disableDinner
+
+	// 무시 regex
+	let config_ignore_regex = document.getElementById("config_ignore_regex")
+	config_ignore_regex.value = config.ignoreRegex
+
+	// 버전 텍스트
+	let config_version_text = document.getElementById("config_version_text")
+	config_version_text.innerHTML = packageInfo.version
+
+	// 학교 검색창
+	let config_school_search = document.getElementById("config_school_search")
+	let config_school_search_input = document.getElementById("config_school_search_input")
+	let school_search_item_template = document.getElementById("school_search_item_template")
+	let searchTimeout
+	let new_REG_CODE,new_SC_CODE,new_SC_NAME
+	config_school_search_input.onkeyup=async()=>{
+		if(window.event.keyCode==13){
+			if (searchTimeout) return
+			searchTimeout = true
+			let text = config_school_search_input.value
+			if (text == "") return
+			let schoolInfos = await getSchool(text)
+			searchTimeout = setTimeout(()=>{
+				searchTimeout = null
+			},1000)
+			// 이미 있던 검색 결과 지우기
+			config_school_search.childNodes.forEach((child)=>{
+				if (child.id != "config_school_search_input") config_school_search.removeChild(child)
+			})
+			console.log(schoolInfos)
+
+			if (schoolInfos.RESULT) {
+				let node = school_search_item_template.content.firstElementChild.cloneNode(true)
+				node.querySelector(".school_search_item_text").textContent = "검색 결과가 없습니다"
+				config_school_search.appendChild(node)
+				return
+			}
+			schoolInfos.schoolInfo[1].row.forEach((school)=>{
+				let node = school_search_item_template.content.firstElementChild.cloneNode(true)
+				node.onclick = ()=>{
+					new_REG_CODE = school.ATPT_OFCDC_SC_CODE
+					new_SC_CODE = school.SD_SCHUL_CODE
+					new_SC_NAME = school.SCHUL_NM
+					config_school_text.innerText = new_SC_NAME
+				}
+				node.querySelector(".school_search_item_text").textContent = `${school.SCHUL_NM} (${school.ORG_RDNMA})`
+				config_school_search.appendChild(node)
+			})
+
+		}
+	}
+
+	// 버그 리포트 버튼
+	let config_report_button = document.getElementById("config_report_button")
+	config_report_button.onclick = ()=>electron.shell.openExternal('https://github.com/qwreey75/schoolMealsWidget/issues/new')
+
+	// 소스코드 버튼
+	let config_source_code_button = document.getElementById("config_source_code_button")
+	config_source_code_button.onclick = ()=>electron.shell.openExternal('https://github.com/qwreey75/schoolMealsWidget')
+
+	// 취소버튼
+	let config_cancel_button = document.getElementById("config_cancel_button")
+	config_cancel_button.onclick = async ()=>{
+		window.resizeTo(Math.ceil(winSize[0]*cropedScale),Math.ceil(winSize[1]*cropedScale))
+		await electron.ipcRenderer.invoke("setmostBottomWindowEnabled",true)
+		location.reload()
+	}
+
+	// 저장버튼
+	let config_save_button = document.getElementById("config_save_button")
+	config_save_button.onclick = async ()=>{
+		config.scale = config_scale.value != "" ? Number(config_scale.value) : 1
+		config.disableDinner = config_disable_dinner.checked;
+		config.ignoreRegex = config_ignore_regex.value
+		config.SC_NAME = new_SC_NAME || config.SC_NAME
+		config.SC_CODE = new_SC_CODE || config.SC_CODE
+		config.REG_CODE = new_REG_CODE || config.REG_CODE
+		await electron.ipcRenderer.invoke("setConfig",config)
+		await electron.ipcRenderer.invoke("setmostBottomWindowEnabled",true)
+		window.resizeTo(Math.ceil(winSize[0]*cropedScale),Math.ceil(winSize[1]*cropedScale))
+		location.reload()
+	}
+}
+configButton.onclick = openConfigPanel
