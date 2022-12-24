@@ -16,6 +16,9 @@ try {config = JSON.parse(fs.readFileSync(configPath)) } catch {
 const winSize = config.winSize || [332,358]
 
 // 설정 넘겨주는 ipc handler
+ipcMain.handle('getPackageInfo',()=>{
+	return require("./package.json")
+})
 ipcMain.handle('getConfig',() => {
 	return config
 })

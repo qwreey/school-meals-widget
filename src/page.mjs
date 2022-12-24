@@ -1,6 +1,7 @@
 const electron = require("electron")
 // 설정 가져오기
 const config = await electron.ipcRenderer.invoke("getConfig")
+const packageInfo = await electron.ipcRenderer.invoke("getPackageInfo")
 
 const API_KEY = config.API_KEY || "a2929ada2e4143a5a7dfdde5a98cc616"
 const REG_CODE = config.REG_CODE
@@ -184,6 +185,10 @@ async function openConfigPanel() {
 	let config_ignore_regex = document.getElementById("config_ignore_regex")
 	config_ignore_regex.value = config.ignoreRegex
 
+	// 버전 텍스트
+	let config_version_text = document.getElementById("config_version_text")
+	config_version_text.innerHTML = packageInfo.version
+
 	// 학교 검색창
 	let config_school_search = document.getElementById("config_school_search")
 	let config_school_search_input = document.getElementById("config_school_search_input")
@@ -230,6 +235,10 @@ async function openConfigPanel() {
 	// 버그 리포트 버튼
 	let config_report_button = document.getElementById("config_report_button")
 	config_report_button.onclick = ()=>electron.shell.openExternal('https://github.com/qwreey75/schoolMealsWidget/issues/new')
+
+	// 소스코드 버튼
+	let config_source_code_button = document.getElementById("config_source_code_button")
+	config_source_code_button.onclick = ()=>electron.shell.openExternal('https://github.com/qwreey75/schoolMealsWidget')
 
 	// 취소버튼
 	let config_cancel_button = document.getElementById("config_cancel_button")
