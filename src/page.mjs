@@ -1,4 +1,5 @@
 const electron = require("electron")
+
 // 설정 가져오기
 const config = await electron.ipcRenderer.invoke("getConfig")
 const packageInfo = await electron.ipcRenderer.invoke("getPackageInfo")
@@ -68,7 +69,7 @@ async function display(id,date,mealCode) {
 
 	let display = document.getElementById(id)
 	if (!data) {
-		display.getElementsByClassName("menu")[0].innerHTML = "급식 정보가 없습니다"
+		display.getElementsByClassName("menu")[0].innerHTML = "급식 정보가<br>없습니다"
 		return [false,"오늘의 급식 정보를<br>확인할 수 없습니다"]
 	}
 
@@ -111,7 +112,7 @@ async function update() {
 			await display("display_dinner",date,3)
 		}
 	} catch (err) {
-		showErr(`오류가 발생했습니다\n${err}`)
+		showErr(`오류가 발생했습니다<br>${err}`)
 	}
 }
 update()
