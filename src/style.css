@@ -5,10 +5,11 @@
     font-weight: normal;
 }
 html, body, #root, #backgroundImage {
-    width: 100%;
-    height: 100%;
+    width: max-content;
+    height: max-content;
     background-color: transparent;
     -webkit-app-region: drag;
+    overflow: visible;
 }
 body {
     display: flex;

@@ -3,6 +3,7 @@ const path = require("path")
 const fs = require("fs")
 const mostBottomWindow = process.platform === "win32" && require("./mostBottomWindowWIN32")
 const ENV = process.env.ENV || "dist"
+const istestMode = ENV == "dev" || config.testMode
 
 // 설정 읽어드리기
 const configPath = path.join(app.getPath("appData"),"schoolMeals.config.json")
@@ -10,7 +11,7 @@ function saveConfig(newConfig) {
 	fs.writeFileSync(configPath,JSON.stringify(newConfig))
 }
 try {config = JSON.parse(fs.readFileSync(configPath)) } catch {
-	config = { winSize: [332,358], ignoreRegex: "(\\(? ?[0-9]+\\. ?\\)?)|[#*]", "SC_CODE": null, "REG_CODE": null, "SC_NAME": null }
+	config = { winSize: [332,358], ignoreRegex: "(\\(? ?[0-9]+\\. ?\\)?)|[#*]", "SC_CODE": null, "REG_CODE": null, "SC_NAME": null, testMode:false }
 	saveConfig(config)
 }
 const winSize = config.winSize || [332,358]
@@ -90,7 +91,7 @@ function createWindow() {
 	win.on('close', winPosUpdated)
 	win.on("moved", winPosUpdated)
 
-	if (ENV != "dev") win.removeMenu() // ctrl w 로 꺼짐 방지
+	if (!istestMode) win.removeMenu() // ctrl w 로 꺼짐 방지
 
 	// TODO
 	// 뒤로 숨기기 (창 맨 아래로)
@@ -99,7 +100,7 @@ function createWindow() {
 	}
 
 	// 시작 프로그램 등록
-	if (ENV != "dev") {
+	if (!istestMode) {
 		app.setLoginItemSettings({
 			openAtLogin: true,
 			path: app.getPath("exe")
