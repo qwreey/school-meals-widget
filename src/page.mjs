@@ -68,7 +68,7 @@ async function display(id,date,mealCode) {
 
 	let display = document.getElementById(id)
 	if (!data) {
-		display.getElementsByClassName("menu")[0].innerHTML = "급식 정보가 없습니다"
+		display.getElementsByClassName("menu")[0].innerHTML = "급식 정보가<br>없습니다."
 		return [false,"오늘의 급식 정보를<br>확인할 수 없습니다"]
 	}
 
@@ -129,31 +129,25 @@ if (disableDinner) {
 }
 
 // 스캐일 지정
-let cropedScale = Math.min(scale,4)
+let cropedScale = Math.max(Math.min(scale,4),0.5)
 let root = document.getElementById("root")
 root.style.fontSize = `${cropedScale}em`
-window.resizeTo(Math.ceil(winSize[0]*cropedScale),Math.ceil(winSize[1]*cropedScale))
+root.classList.add(config.textColor || "outline") // 색깔지정
 
 // 크기조절 요청하기
-let lastRootSizeY = root.offsetHeight,updateWindowSizeTimeout,windowSizeUpdated
+let lastRootSizeY = root.clientHeight,
+	lastRootSizeX = root.clientWidth,
+	updateWindowSizeTimeout
 function updateWindowSize() {
-	if (configPanelVisible) return
-	window.resizeTo(Math.ceil(winSize[0]*cropedScale),Math.ceil(lastRootSizeY))
-}
-function removeUpdateWindowTimeout() {
 	updateWindowSizeTimeout = null
-	if (windowSizeUpdated) {
-		windowSizeUpdated = null
-		updateWindowSize()
-	}
+	if (configPanelVisible) return
+	lastRootSizeY = root.clientHeight
+	lastRootSizeX = root.clientWidth
+	window.resizeTo(Math.ceil(lastRootSizeX),Math.ceil(lastRootSizeY))
 }
 function onRootSizeChanged() {
-	lastRootSizeY = root.offsetHeight
-	if (updateWindowSizeTimeout) {
-		windowSizeUpdated = true
-		return
-	}
-	updateWindowSizeTimeout = setTimeout(removeUpdateWindowTimeout,100)
+	if (updateWindowSizeTimeout) return
+	updateWindowSizeTimeout = setTimeout(updateWindowSize,100)
 }
 new ResizeObserver(onRootSizeChanged).observe(root)
 onRootSizeChanged()
@@ -168,10 +162,27 @@ async function openConfigPanel() {
 	await electron.ipcRenderer.invoke("takeFocus")
 	root.classList.add("hidden")
 	configPanel.classList.remove("hidden")
-	window.resizeTo(configPanel.offsetWidth,configPanel.offsetHeight)
+	window.resizeTo(configPanel.clientWidth,configPanel.clientHeight)
 
+	// 스캐일
 	let config_scale = document.getElementById("config_scale")
-	config_scale.value = scale
+	config_scale.value = cropedScale
+
+	// 텍스트 컬러
+	let config_textcolor_outline = document.getElementById("config_textcolor_outline")
+	let config_textcolor_white = document.getElementById("config_textcolor_white")
+	let config_textcolor_black = document.getElementById("config_textcolor_black")
+	switch (config.textColor) {
+		case "white":
+		config_textcolor_white.checked = true
+		break
+		case "black":
+		config_textcolor_black.checked = true
+		break
+		default:
+		config_textcolor_outline.checked = true
+		break
+	}
 
 	// 학교 이름
 	let config_school_text = document.getElementById("config_school_text")
@@ -257,6 +268,10 @@ async function openConfigPanel() {
 		config.SC_NAME = new_SC_NAME || config.SC_NAME
 		config.SC_CODE = new_SC_CODE || config.SC_CODE
 		config.REG_CODE = new_REG_CODE || config.REG_CODE
+		if (config_textcolor_white.checked) config.textColor = "white"
+		else if (config_textcolor_black.checked) config.textColor = "black"
+		else config.textColor = "outline"
+		config_textcolor_outline.checked = true
 		await electron.ipcRenderer.invoke("setConfig",config)
 		await electron.ipcRenderer.invoke("setmostBottomWindowEnabled",true)
 		window.resizeTo(Math.ceil(winSize[0]*cropedScale),Math.ceil(winSize[1]*cropedScale))

@@ -10,7 +10,7 @@ function saveConfig(newConfig) {
 	fs.writeFileSync(configPath,JSON.stringify(newConfig))
 }
 try {config = JSON.parse(fs.readFileSync(configPath)) } catch {
-	config = { winSize: [332,358], ignoreRegex: "(\\(? ?[0-9]+\\. ?\\)?)|[#*]", "SC_CODE": null, "REG_CODE": null, "SC_NAME": null }
+	config = { textColor: "outline", winSize: [332,358], ignoreRegex: "(\\(? ?[0-9]+\\. ?\\)?)|[#*]", "SC_CODE": null, "REG_CODE": null, "SC_NAME": null }
 	saveConfig(config)
 }
 const winSize = config.winSize || [332,358]

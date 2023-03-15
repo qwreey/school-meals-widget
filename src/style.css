@@ -1,277 +1,302 @@
 @font-face {
-    font-family: "SiteFont";
-    src:url("./font.ttf") format("truetype");
-    font-style: normal;
-    font-weight: normal;
+	font-family: "SiteFont";
+	src:url("./font.ttf") format("truetype");
+	font-style: normal;
+	font-weight: normal;
 }
 html, body, #root, #backgroundImage {
-    width: 100%;
-    height: 100%;
-    background-color: transparent;
-    -webkit-app-region: drag;
+	width: max-content;
+	overflow: visible;
+	height: max-content;
+	background-color: transparent;
+	-webkit-app-region: drag;
 }
 body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	margin: 0;
 	overflow: hidden;
 	user-select: none;
 }
 p {
-    margin: 0 0 0 0;
-    font-family: "SiteFont";
-    text-shadow: 1px  1px  0px white,
-                 -1px -1px 0px white,
-                 -1px 1px  0px white,
-                 1px  -1px 0px white;
+	margin: 0 0 0 0;
+	font-family: "SiteFont";
+}
+.outline p {
+	color: black;
+	text-shadow: 1px  1px  0px white,
+				 -1px -1px 0px white,
+				 -1px 1px  0px white,
+				 1px  -1px 0px white;
+}
+.white p {
+	color: white;
+}
+.black p {
+	color: black;
+}
+#config_panel p {
+	color: white;
 }
 
 #root { /* 최상위 */
-    width: fit-content;
-    /* max-width: 100%; */
-    height: fit-content;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
 }
 #root > div:not(#bottombar) {
-    width: fit-content;
+	width: fit-content;
 }
 #holder { /* 아이템 나열 */
-    display: flex;
-    align-content: center;
-    justify-content: center;
-    flex-direction: row;
+	display: flex;
+	align-content: center;
+	justify-content: center;
+	flex-direction: row;
 }
 #backgroundImage { /* 배경 */
-    position: absolute;
-    z-index: -1;
+	position: absolute;
+	z-index: -1;
 }
 .hidden {
-    display: none !important;
+	display: none !important;
 }
 
 /* 급식 정보판 */
 .display { /* 아이템 */
-    margin-left: 4px;
-    margin-right: 4px;
+	margin-left: 4px;
+	margin-right: 4px;
 }
 .display .titleHolder { /* 급식 제목 홀더 */
-    width: 100%;
-    height: auto;
-    display: flex;
-    align-content: center;
-    flex-direction: row;
+	width: 100%;
+	height: auto;
+	display: flex;
+	align-content: center;
+	flex-direction: row;
 }
 .display .icon { /* 급식 제목 아이콘 */
-    width: 2em;
-    height: 2em;
-    margin-right: 8px;
+	width: 2em;
+	height: 2em;
+	margin-right: 8px;
 }
 .display .title { /* 급식 제목 */
-    font-size: 1.64em;
-    margin-bottom: 8px;
+	font-size: 1.64em;
+	margin-bottom: 8px;
 }
 .display .menu { /* 급식 매뉴 */
-    margin-bottom: 4px;
-    width: 100%;
-    height: auto;
-    font-size: 1.2em;
+	margin-bottom: 4px;
+	width: 100%;
+	height: auto;
+	font-size: 1.2em;
 }
 
 /* 애플리캐이션 타이틀바 */
 #topbar {
-    display: flex;
-    align-content: center;
-    justify-content: center;
-    flex-direction: row;
-    margin-bottom: 9px;
+	display: flex;
+	align-content: center;
+	justify-content: center;
+	flex-direction: row;
+	margin-bottom: 9px;
 }
 #topbar .title {
-    font-size: 1.9em;
-    margin-bottom: 0px;
-    text-align: justify;
-    text-align-last: center;
-    padding-top: 10px;
+	font-size: 1.9em;
+	margin-bottom: 0px;
+	text-align: justify;
+	text-align-last: center;
+	padding-top: 10px;
 }
 #topbar .icon {
-    width: 3.3em;
-    height: 3.3em;
-    margin-right: 12px;
+	width: 3.3em;
+	height: 3.3em;
+	margin-right: 12px;
 }
 
 /* 오류 정보 */
 #error {
-    width: 100%;
-    height: auto;
+	width: 100%;
+	height: auto;
 }
 #error p {
-    text-align: center;
-    font-size: 1.5em;
+	text-align: center;
+	font-size: 1.5em;
 }
 
 /* 편집 버튼 / 리로드 버튼 */
 #reload_button,#close_button,#config_save_button,#config_cancel_button,#config_report_button {
-    margin-right: 8px;
+	margin-right: 8px;
 }
 #bottombar {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: right;
-    padding-top: 12px;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: right;
+	padding-top: 12px;
 }
 .bottombarButton {
-    -webkit-app-region: no-drag;
-    /* margin-top: 12px; */
-    display: flex;
-    flex-direction: row;
-    justify-content: right;
-    align-items: center;
+	-webkit-app-region: no-drag;
+	/* margin-top: 12px; */
+	display: flex;
+	flex-direction: row;
+	justify-content: right;
+	align-items: center;
 }
 .bottombarButton .bottombarButtonIcon {
-    -webkit-user-select: none;
-    width: 1.6em;
-    height: 1.6em;
-    margin-right: 4px;
+	-webkit-user-select: none;
+	width: 1.6em;
+	height: 1.6em;
+	margin-right: 4px;
 }
 .bottombarButton .bottombarButtonText {
-    font-size: 0.9em;
+	font-size: 0.9em;
 }
 
 /* 설정 페이지 */
 #config_panel {
-    width: 500px;
-    height: 580px;
-    background-color: rgba(17, 17, 17, 0.7);
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    -webkit-app-region: no-drag;
-    border-radius: 8px;
+	width: 500px;
+	height: 590px;
+	background-color: rgba(17, 17, 17, 0.7);
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	-webkit-app-region: no-drag;
+	border-radius: 8px;
 }
 #configTopbar {
-    width: 100%;
-    height: 42px;
-    background-color: rgba(0,0,0,0.78);
-    display: flex;
-    align-items: center;
-    -webkit-app-region: drag;
-    margin-bottom: 12px;
-    border-radius: 8px 8px 0px 0px;
+	width: 100%;
+	height: 42px;
+	background-color: rgba(0,0,0,0.78);
+	display: flex;
+	align-items: center;
+	-webkit-app-region: drag;
+	margin-bottom: 8px;
+	border-radius: 8px 8px 0px 0px;
 }
 #configTopbarText {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-size: 14px;
-    color: white;
-    text-shadow: none;
-    margin: 0px 0px 0px 12px;
+	font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+	font-size: 14px;
+	color: white;
+	text-shadow: none;
+	margin: 0px 0px 0px 12px;
 }
 .configTitle {
-    text-shadow: 1px  1px  0px black,
-                 -1px -1px 0px black,
-                 -1px 1px  0px black,
-                 1px  -1px 0px black;
-    color: white;
-    font-size: 1.3em;
-    margin-left: 12px;
-    margin-bottom: 10px;
+	text-shadow: 1px  1px  0px black,
+				 -1px -1px 0px black,
+				 -1px 1px  0px black,
+				 1px  -1px 0px black;
+	color: white;
+	font-size: 1.2em;
+	margin-left: 12px;
+	margin-bottom: 6px;
 }
 .configText {
-    text-shadow: 1px  1px  0px black,
-                 -1px -1px 0px black,
-                 -1px 1px  0px black,
-                 1px  -1px 0px black;
-    color: white;
-    font-size: 0.98em;
-    margin-left: 12px;
-    margin-bottom: 10px;
+	text-shadow: 1px  1px  0px black,
+				 -1px -1px 0px black,
+				 -1px 1px  0px black,
+				 1px  -1px 0px black;
+	color: white;
+	font-size: 0.89em;
+	margin-left: 12px;
+	margin-bottom: 10px;
 }
 .configClickToEdit {
-    color: rgb(148, 148, 255);
+	color: rgb(148, 148, 255);
 }
 #config_scale {
-    height: 24;
-    width: 80;
-    padding: 5px;
-    background-color: rgba(100, 100, 100, 0.7);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    margin-left: 12px;
-    margin-bottom: 10px;
+	height: 24;
+	width: 80;
+	padding: 5px;
+	background-color: rgba(100, 100, 100, 0.7);
+	color: white;
+	border: none;
+	border-radius: 8px;
+	margin-left: 12px;
+	margin-bottom: 10px;
 }
 #config_panel .bottombarButtonText {
-    text-shadow: 1px  1px  0px black,
-                 -1px -1px 0px black,
-                 -1px 1px  0px black,
-                 1px  -1px 0px black;
-    color: white;
+	text-shadow: 1px  1px  0px black,
+				 -1px -1px 0px black,
+				 -1px 1px  0px black,
+				 1px  -1px 0px black;
+	color: white;
 }
 #config_school_search {
-    overflow-y: auto;
-    overflow-x: hidden;
-    height: 110px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    margin-left: 12px;
-    width: calc(100% - 24px);
-    border: solid rgba(100, 100, 100, 0.7) 1px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	height: 100px;
+	margin-bottom: 10px;
+	border-radius: 8px;
+	margin-left: 12px;
+	width: calc(100% - 24px);
+	border: solid rgba(100, 100, 100, 0.7) 1px;
 }
 #config_school_search_input {
-    height: 24px;
-    width: 100%;
-    border: none;
-    margin: 0px 0px 2px 0px;
-    background-color: rgba(100, 100, 100, 0.7);
-    color: white;
+	height: 24px;
+	width: 100%;
+	border: none;
+	margin: 0px 0px 2px 0px;
+	background-color: rgba(100, 100, 100, 0.7);
+	color: white;
 }
 #config_school_search_input::placeholder {
-    color: rgba(255,255,255,0.6);
+	color: rgba(255,255,255,0.6);
 }
 #config_disable_dinner {
-    margin-left: 12px;
+	margin-left: 6px;
 }
 [for="config_disable_dinner"] {
-    font-family: SiteFont;
-    color: white;
-    font-size: 0.98em;
+	font-family: SiteFont;
+	color: white;
+	font-size: 0.89em;
 }
 #config_disable_dinner_margin {
-    height: 10px;
+	height: 10px;
 }
 #config_ignore_regex {
-    width: calc(100% - 24px - 10px);
-    height: 24;
-    padding: 5px;
-    background-color: rgba(100, 100, 100, 0.7);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    margin-left: 12px;
-    margin-bottom: 10px;
+	width: calc(100% - 24px - 10px);
+	height: 24;
+	padding: 5px;
+	background-color: rgba(100, 100, 100, 0.7);
+	color: white;
+	border: none;
+	border-radius: 8px;
+	margin-left: 12px;
+	margin-bottom: 6px;
 }
 .school_search_item {
-    padding-top: 3px;
-    height: 24px;
-    width: 100%;
-    margin-bottom: 1px;
-    background-color: rgba(58, 58, 58, 0.7);
-    transition: background-color ease 0.3s;
+	padding-top: 3px;
+	height: 24px;
+	width: 100%;
+	margin-bottom: 1px;
+	background-color: rgba(58, 58, 58, 0.7);
+	transition: background-color ease 0.3s;
 }
 .school_search_item:hover {
-    background-color: rgba(94, 94, 94, 0.7);
+	background-color: rgba(94, 94, 94, 0.7);
 }
 .school_search_item:active {
-    background-color: rgba(128, 128, 128, 0.7);
+	background-color: rgba(128, 128, 128, 0.7);
 }
 .school_search_item_text {
-    font-size: 0.96em;
-    color: white;
-    text-shadow: 1px  1px  0px black,
-                 -1px -1px 0px black,
-                 -1px 1px  0px black,
-                 1px  -1px 0px black;
+	font-size: 0.96em;
+	color: white;
+	text-shadow: 1px  1px  0px black,
+				 -1px -1px 0px black,
+				 -1px 1px  0px black,
+				 1px  -1px 0px black;
+}
+#config_textcolor {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	margin-bottom: 6px;
+}
+#config_textcolor label {
+	font-family: SiteFont;
+	color: white;
+	font-size: 0.89em;
+}
+#config_textcolor div {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
