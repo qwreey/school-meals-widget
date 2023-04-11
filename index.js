@@ -46,7 +46,7 @@ ipcMain.handle('takeFocus',()=>{
 let win
 function createWindow() {
 	win = new BrowserWindow({
-		minimizable: false,
+		minimizable: true,
 		icon: 'src/icons/headerIcon.png',
 		width: parseInt(winSize[0]),
 		height: parseInt(winSize[1]),
@@ -69,12 +69,14 @@ function createWindow() {
 	win.on("closed", () => {
 		win = null
 	})
-	win.on("minimize", () => {
-		win.setSkipTaskbar(false)
+	win.on("minimize", e => {
+		e.preventDefault()
+		setTimeout(mainWindow.restore.bind(mainWindow),150)
+		// win.setSkipTaskbar(false)
 	})
-	win.on("restore", () => {
-		win.setSkipTaskbar(true)
-	})
+	// win.on("restore", () => {
+	// 	win.setSkipTaskbar(true)
+	// })
 
 	// 이전 위치 복구하기
 	let winPos = config.winPos
